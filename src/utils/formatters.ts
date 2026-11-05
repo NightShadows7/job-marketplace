@@ -1,9 +1,13 @@
+ /* PRICE FROM CENTS TO EUROS */
+ 
  export const formatPrice = (priceCents: number): string => {
     return new Intl.NumberFormat("pt-PT", {
         style: "currency",
         currency: "EUR",
     }).format(priceCents / 100);
  };
+
+ /* DATE AND TIME TO PORTUGUESE FORMAT */
 
  export const formatDate = (date: string): string => {
     return new Intl.DateTimeFormat("pt-PT", {
@@ -15,6 +19,8 @@
         timeZone: "Europe/Lisbon",
     }).format(new Date(date));
  };
+
+ /* DURATION FROM MINUTES TO HOURS */
 
  export const formatDuration = (durationMin: number): string => {
     const hours = Math.floor(durationMin / 60);

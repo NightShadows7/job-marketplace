@@ -5,8 +5,12 @@ import JobCard from "./components/JobCard";
 import {jobs as initialJobs} from "./data/jobs";
 import "./App.css";
 import Loading from "./components/Loading";
+import CreateJobModal from "./components/CreateJobModal";
 
 function App() {
+
+  /* SETTERS */
+
   const [jobs, setJobs] = useState<JobRequest[]>(initialJobs);
 
   const [selectedCity, setSelectedCity] = useState(
@@ -17,13 +21,21 @@ function App() {
 
   const [successMessage, setSuccessMessage] = useState("");
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  /* LOADING */
+
   useEffect(() => {
+    setIsLoading(true);
+
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [selectedCity]);
+
+  /* FILTERS */
 
   const filteredJobs = jobs .filter((job) => {
     return (
@@ -32,6 +44,8 @@ function App() {
   }) .sort((a, b) => 
         new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime()
       );
+  
+  /* ACCEPT REQUEST */
 
   const handleAccept = (id: string) => {
     setJobs((currentJobs) => currentJobs.filter((job) => job.id !== id)
@@ -50,10 +64,20 @@ function App() {
     return () => clearTimeout(timer);
   }, [successMessage]);
 
+  /* NEW REQUEST */
+
+  const handleCreateJob = (newJob: JobRequest) => {
+    setJobs((currentJobs) => [...currentJobs, newJob]);
+
+    setSelectedCity(newJob.city);
+
+    setSuccessMessage("Request created successfully");
+  };
+
   return (
     <main className="app-container">
       <header className="app-header">
-        <h1>Available Requests</h1>
+        <h1>Job Marketplace</h1>
         <p>Search available requests and accept services that interest you.</p>
       </header>
 
@@ -63,10 +87,16 @@ function App() {
         </div>
       )}
 
-      <CityFilter
-        selectedCity={selectedCity}
-        onCityChange={setSelectedCity}
-      />
+      <div className="filter-actions">
+        <CityFilter
+          selectedCity={selectedCity}
+          onCityChange={setSelectedCity}
+        />
+
+        <button
+        className="create-request-btn"
+        onClick={() => setIsModalOpen(true)}>Create Request</button>
+      </div>
 
       {isLoading ? (
         <Loading />
@@ -77,7 +107,12 @@ function App() {
               {filteredJobs.length === 1 ? "request" : "requests"}
               {selectedCity !== "All Cities" && ` in ${selectedCity}`}
             </p>
+
+            <span className="total-requests">
+            {jobs.length} requests
+          </span>
           </div>
+          
 
           {filteredJobs.length > 0 ? (
             <section className="jobs-list">
@@ -101,6 +136,13 @@ function App() {
             </div>
           )}
         </>
+      )}
+
+      {isModalOpen && (
+        <CreateJobModal
+          onClose={() => setIsModalOpen(false)}
+          onCreate={handleCreateJob}
+        />
       )}
 
 

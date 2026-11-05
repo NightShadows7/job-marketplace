@@ -46,11 +46,13 @@ The application will be available at the local URL displayed in the terminal
 - Display available job requests
 - Filter requests by city
 - Accept requests and remove them from the available list
-- Display loading state when the application starts
+- Display loading state when the application starts and when a filter is used
 - Display an empty state when no requests are available
 - Format dates, durations and prices according to portuguese conventions 
 - Highlight urgent requests
 - Display a success message after accepting a request
+- Show the total requests available
+- Form to create a new request
 
 
 ## Future Improvements
