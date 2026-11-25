@@ -1,4 +1,4 @@
-# Job Marketplace
+# Job Marketplace --> Exercício
 
 A simple React + TypeScript application that allows users to browse available service requests, filter them by city, and accept requests that interest them.
 
